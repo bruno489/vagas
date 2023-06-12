@@ -1,24 +1,25 @@
-var data =  require("./fakeData");
+var data = require("./fakeData");
 
-const getUser = ( req, res, next ) => {
-    
-    var name =  req.query.name;
+const getUser = (req, res, next) => {
+  try {
+    const { name } = req.query;
 
-    for(let i = 0; i < data.length;  i++) {
-        if(i.name == name) {
-            res.send(data[i]);
-        }
-    }
+    const userData = data.find((user) =>
+      user.name.toUpperCase().includes(name.toUpperCase())
+    );
 
+    res.status(200).send(userData);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ error: "Error to find user." });
+  }
 };
 
-const getUsers = ( req, res, next ) => {
-    
-    res.send(data);
-    
+const getUsers = (req, res, next) => {
+  res.send(data);
 };
 
 module.exports = {
-    getUser,
-    getUsers
+  getUser,
+  getUsers,
 };

@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var dotenv = require('dotenv')
 var app = express();
 
 var teste1 = require("./teste1");
@@ -7,7 +8,9 @@ var teste2 = require("./teste2");
 var teste3 = require("./teste3");
 var teste4 = require("./teste4");
 var teste5 = require("./teste5");
+var auths = require("./middleware");
 
+dotenv.config()
 
 app.set('view engine', 'jade');
 
@@ -31,9 +34,10 @@ app.get('/', function(req, res){
 app.get("/user", teste1.getUser);
 app.get("/users", teste1.getUsers);
 app.post("/users", teste2)
-app.delete("/users", teste3)
-app.put("/users", teste4)
+app.delete("/users", auths.authMiddleware, teste3)
+app.put("/users", auths.authMiddleware, teste4)
 app.get("/users/access", teste5);
+app.get("/getJWT", auths.getJWT);
 
 
 const port  = 3000;

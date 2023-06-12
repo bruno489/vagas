@@ -1,9 +1,16 @@
+const data = require("./fakeData");
 
+module.exports = function (req, res) {
+  try {
+    const { name } = req.query;
 
-module.exports = function(req, res){
-    
-    var name =  req.query.name;
+    const users = data.filter((user) =>
+      user.name.toUpperCase().includes(name.toUpperCase())
+    );
 
-    res.send("Usuário " +  name  + "  foi lido 0 vezes.");
-
+    res.status(200).send(`Usuário ${name} foi lido ${users.length} vezes.`);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ error: "Error to find users." });
+  }
 };
